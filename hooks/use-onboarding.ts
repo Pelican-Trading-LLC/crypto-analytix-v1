@@ -122,7 +122,7 @@ export function useOnboarding(): UseOnboardingReturn {
         })
         .eq('user_id', user.id)
 
-      router.push('/portfolio')
+      router.push('/dashboard')
     } catch {
       setError('Something went wrong. Please try again.')
       setIsSubmitting(false)
@@ -150,10 +150,10 @@ export function useOnboarding(): UseOnboardingReturn {
           .eq('user_id', user.id)
       }
 
-      router.push('/portfolio')
+      router.push('/dashboard')
     } catch {
       // Best effort — still redirect
-      router.push('/portfolio')
+      router.push('/dashboard')
     }
   }, [isSubmitting, router])
 

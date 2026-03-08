@@ -8,7 +8,7 @@ import { createBrowserClient } from '@/lib/supabase/client'
 export default function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const redirect = searchParams.get('redirect') || '/portfolio'
+  const redirect = searchParams.get('redirect') || '/dashboard'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -90,12 +90,18 @@ export default function LoginForm() {
     <div className="flex min-h-screen items-center justify-center px-4" style={{ backgroundColor: 'var(--bg-base)' }}>
       <div className="w-full max-w-sm">
         {/* Logo / Title */}
-        <div className="mb-8 text-center">
+        <div className="mb-8 text-center flex flex-col items-center">
+          <div
+            className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center text-white text-xs font-bold mb-4"
+            style={{ background: 'linear-gradient(135deg, #1DA1C4, #178BA8)' }}
+          >
+            CA
+          </div>
           <h1 className="text-2xl font-semibold" style={{ color: 'var(--text-primary)' }}>
             Welcome back
           </h1>
           <p className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
-            Sign in to Crypto Analytix
+            AI-powered crypto intelligence for traditional traders
           </p>
         </div>
 

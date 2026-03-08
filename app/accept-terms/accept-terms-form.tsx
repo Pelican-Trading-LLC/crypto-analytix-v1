@@ -42,7 +42,7 @@ export default function AcceptTermsForm() {
       if (!userCredits?.onboarding_complete) {
         router.push('/onboarding')
       } else {
-        router.push('/portfolio')
+        router.push('/dashboard')
       }
 
       router.refresh()

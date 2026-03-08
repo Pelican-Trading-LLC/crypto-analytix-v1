@@ -1,7 +1,7 @@
 'use client'
 
-import { Suspense } from 'react'
-import Sidebar from '@/components/navigation/sidebar'
+import { Suspense, useState, useEffect } from 'react'
+import AppSidebar from '@/components/navigation/app-sidebar'
 import HeaderBar from '@/components/navigation/header-bar'
 import MobileNav from '@/components/navigation/mobile-nav'
 import PelicanChatPanel from '@/components/pelican-panel/pelican-chat-panel'
@@ -11,6 +11,8 @@ import { GlossaryProvider } from '@/lib/glossary/glossary-provider'
 import { PELICAN_PANEL_WIDTH } from '@/lib/constants'
 import { useBrief } from '@/hooks/use-brief'
 
+const SIDEBAR_STORAGE_KEY = 'ca-sidebar-collapsed'
+
 function WhatIMissedWrapper() {
   const { whatIMissed, dismissWhatIMissed } = useBrief()
   return <WhatIMissed data={whatIMissed} onDismiss={dismissWhatIMissed} />
@@ -18,6 +20,21 @@ function WhatIMissedWrapper() {
 
 function FeaturesContent({ children }: { children: React.ReactNode }) {
   const { state } = usePelicanPanelContext()
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(true)
+
+  // Sync sidebar collapse state for margin calculation
+  useEffect(() => {
+    const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY)
+    setSidebarCollapsed(stored === 'true')
+
+    const handler = ((e: CustomEvent<boolean>) => {
+      setSidebarCollapsed(e.detail)
+    }) as EventListener
+    window.addEventListener('sidebar-collapse', handler)
+    return () => window.removeEventListener('sidebar-collapse', handler)
+  }, [])
+
+  const sidebarWidth = sidebarCollapsed ? 60 : 220
 
   return (
     <div className="min-h-screen flex" style={{ backgroundColor: 'var(--bg-base)' }}>
@@ -30,10 +47,13 @@ function FeaturesContent({ children }: { children: React.ReactNode }) {
       />
 
       {/* Sidebar — hidden on mobile */}
-      <Sidebar />
+      <AppSidebar />
 
-      {/* Main content area */}
-      <div className="flex-1 flex flex-col min-h-screen md:ml-[60px] relative z-10">
+      {/* Main content area — sidebar hidden on mobile, so no margin there */}
+      <div
+        className="flex-1 flex flex-col min-h-screen relative z-10 transition-[margin] duration-200 ease-out md:!ml-[var(--sidebar-w)]"
+        style={{ '--sidebar-w': `${sidebarWidth}px` } as React.CSSProperties}
+      >
         <HeaderBar />
 
         <main

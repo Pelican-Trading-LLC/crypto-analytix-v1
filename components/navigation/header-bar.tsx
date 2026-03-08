@@ -183,7 +183,7 @@ export default function HeaderBar() {
   const pathname = usePathname()
 
   const renderHeaderContent = () => {
-    if (pathname === '/portfolio' || pathname === '/') {
+    if (pathname === '/dashboard' || pathname === '/portfolio' || pathname === '/') {
       return (
         <Suspense fallback={<PortfolioHeaderSkeleton />}>
           <PortfolioHeader />
@@ -230,8 +230,8 @@ export default function HeaderBar() {
 
       {/* Right group */}
       <div className="flex items-center gap-2">
-        {/* Live indicator -- hidden on mobile, only on portfolio */}
-        {(pathname === '/portfolio' || pathname === '/') && (
+        {/* Live indicator -- hidden on mobile, only on dashboard/portfolio */}
+        {(pathname === '/dashboard' || pathname === '/portfolio' || pathname === '/') && (
           <div className="hidden md:flex items-center gap-1.5">
             <LiveDot size={6} />
             <span className="text-[11px] text-[var(--text-muted)]">Live</span>

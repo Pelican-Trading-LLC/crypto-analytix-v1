@@ -78,11 +78,9 @@ export function WelcomeScreen({ onSelectPrompt, userName }: WelcomeScreenProps) 
         <SuggestedPrompts onSelectPrompt={onSelectPrompt} />
       </div>
 
-      {/* Guide link */}
+      {/* Guide link → Learn page */}
       <a
-        href="https://www.cryptoanalytix.com/guide"
-        target="_blank"
-        rel="noopener noreferrer"
+        href="/learn"
         className="flex items-center gap-1.5 mt-6 transition-colors duration-150"
         style={{ fontSize: 12, color: 'var(--text-muted)' }}
         onMouseEnter={(e) => {
@@ -92,7 +90,7 @@ export function WelcomeScreen({ onSelectPrompt, userName }: WelcomeScreenProps) 
           e.currentTarget.style.color = 'var(--text-muted)'
         }}
       >
-        Crypto Analytix Guide
+        See how to get the most from Pelican
         <ArrowSquareOut size={12} />
       </a>
     </div>

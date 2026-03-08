@@ -12,7 +12,17 @@ export const metadata: Metadata = {
     template: '%s | Crypto Analytix',
   },
   description:
-    'Crypto analysis, education, and intelligence for traditional finance traders entering crypto.',
+    'AI-powered crypto intelligence for traditional traders',
+  openGraph: {
+    title: 'Crypto Analytix',
+    description: 'AI-powered crypto intelligence for traditional traders',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Crypto Analytix',
+    description: 'AI-powered crypto intelligence for traditional traders',
+  },
 }
 
 export default function RootLayout({

@@ -97,12 +97,18 @@ export default function SignupForm() {
     <div className="flex min-h-screen items-center justify-center px-4" style={{ backgroundColor: 'var(--bg-base)' }}>
       <div className="w-full max-w-sm">
         {/* Title */}
-        <div className="mb-8 text-center">
+        <div className="mb-8 text-center flex flex-col items-center">
+          <div
+            className="w-[34px] h-[34px] rounded-[10px] flex items-center justify-center text-white text-xs font-bold mb-4"
+            style={{ background: 'linear-gradient(135deg, #1DA1C4, #178BA8)' }}
+          >
+            CA
+          </div>
           <h1 className="text-2xl font-semibold" style={{ color: 'var(--text-primary)' }}>
             Create your account
           </h1>
           <p className="mt-2 text-sm" style={{ color: 'var(--text-secondary)' }}>
-            Start analyzing crypto like a pro
+            AI-powered crypto intelligence for traditional traders
           </p>
         </div>
 

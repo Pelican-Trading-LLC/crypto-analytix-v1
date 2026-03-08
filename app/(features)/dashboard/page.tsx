@@ -2,7 +2,7 @@
 
 import { Suspense, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Flask, X, CaretUp, CaretDown } from '@phosphor-icons/react'
+import { Flask, X, CaretUp, CaretDown, Bird } from '@phosphor-icons/react'
 import { useRouter } from 'next/navigation'
 import { formatCurrency, formatCurrencyWithSign, formatPercentWithSign, formatCompact, formatTimeAgo } from '@/lib/formatters'
 import { StatCard } from '@/components/portfolio/stat-card'
@@ -299,12 +299,12 @@ function SmartMoneyFeed({ entries }: { entries: SmartMoneyEntry[] }) {
 }
 
 // ---------------------------------------------------------------------------
-// Shimmer loading skeleton for dashboard stat cards
+// Shimmer loading skeleton
 // ---------------------------------------------------------------------------
 
 function DashboardLoading() {
   return (
-    <div className="max-w-[960px] mx-auto" style={{ padding: 'var(--space-page-x)' }}>
+    <div className="max-w-[1200px] mx-auto" style={{ padding: 'var(--space-page-x)' }}>
       {/* Header skeleton */}
       <div className="shimmer rounded h-[24px] w-[120px] mb-6" />
 
@@ -327,24 +327,74 @@ function DashboardLoading() {
         ))}
       </div>
 
-      {/* Table skeleton */}
-      <div className="mt-8">
-        <div className="shimmer rounded h-[14px] w-[100px] mb-4" />
+      {/* Chart + pulse skeleton */}
+      <div className="grid grid-cols-1 xl:grid-cols-4 mt-6" style={{ gap: 'var(--space-card-gap)' }}>
         <div
-          className="rounded-xl border overflow-hidden"
-          style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-subtle)', padding: '16px' }}
+          className="xl:col-span-3 rounded-xl border"
+          style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-subtle)', minHeight: 300, padding: 20 }}
         >
-          {Array.from({ length: 5 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-4 py-3">
-              <div className="shimmer rounded-full w-[28px] h-[28px]" />
-              <div className="shimmer rounded w-[60px] h-[14px]" />
-              <div className="flex-1" />
-              <div className="shimmer rounded w-[80px] h-[14px]" />
-            </div>
-          ))}
+          <div className="shimmer rounded w-[140px] h-[12px] mb-4" />
+          <div className="shimmer rounded w-full" style={{ height: 200 }} />
+        </div>
+        <div
+          className="rounded-xl border"
+          style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-subtle)', minHeight: 300, padding: 20 }}
+        >
+          <div className="shimmer rounded w-[100px] h-[12px] mb-4" />
+          <div className="shimmer rounded w-full" style={{ height: 200 }} />
         </div>
       </div>
+
+      {/* Bottom skeletons */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 mt-6" style={{ gap: 'var(--space-card-gap)' }}>
+        {Array.from({ length: 2 }).map((_, i) => (
+          <div
+            key={i}
+            className="rounded-xl border overflow-hidden"
+            style={{ background: 'var(--bg-surface)', borderColor: 'var(--border-subtle)', padding: '16px' }}
+          >
+            {Array.from({ length: 5 }).map((_, j) => (
+              <div key={j} className="flex items-center gap-4 py-3">
+                <div className="shimmer rounded-full w-[28px] h-[28px]" />
+                <div className="shimmer rounded w-[60px] h-[14px]" />
+                <div className="flex-1" />
+                <div className="shimmer rounded w-[80px] h-[14px]" />
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
     </div>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Ask Pelican FAB
+// ---------------------------------------------------------------------------
+
+function AskPelicanFAB() {
+  const router = useRouter()
+
+  return (
+    <button
+      onClick={() => router.push('/pelican-portal')}
+      className="fixed z-50 flex items-center gap-2 rounded-full px-5 py-3 text-white font-medium text-[14px] cursor-pointer transition-all duration-200 hover:scale-[1.02]"
+      style={{
+        bottom: 24,
+        right: 24,
+        background: 'var(--accent-gradient)',
+        boxShadow: '0 4px 20px rgba(29,161,196,0.35), 0 2px 8px rgba(0,0,0,0.3)',
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = '0 6px 28px rgba(29,161,196,0.45), 0 2px 8px rgba(0,0,0,0.3)'
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = '0 4px 20px rgba(29,161,196,0.35), 0 2px 8px rgba(0,0,0,0.3)'
+      }}
+    >
+      <Bird size={20} weight="fill" />
+      Ask Pelican
+    </button>
   )
 }
 
@@ -355,11 +405,9 @@ function DashboardLoading() {
 function DashboardContent() {
   const router = useRouter()
 
-  // Use mock data directly — no API dependency, always shows real values
   const portfolio = useMemo(() => getMockPortfolioSummary(), [])
   const isDemoMode = true
 
-  // Derive values from mock portfolio
   const totalValue = portfolio.total_value
   const totalPnl = portfolio.total_pnl
   const totalPnlPct = portfolio.total_pnl_pct
@@ -367,7 +415,7 @@ function DashboardContent() {
   const pnlTint = totalPnl >= 0 ? 'rgba(34,197,94,0.06)' : 'rgba(239,68,68,0.06)'
 
   return (
-    <div className="max-w-[960px] mx-auto" style={{ padding: 'var(--space-page-x)' }}>
+    <div className="max-w-[1200px] mx-auto" style={{ padding: 'var(--space-page-x)' }}>
       <AnimatePresence mode="wait">
         <motion.div
           key="dashboard-content"
@@ -412,9 +460,10 @@ function DashboardContent() {
             Dashboard
           </h1>
 
-          {/* Stat Cards */}
+          {/* ============================================================= */}
+          {/* ROW 1 — 4 stat cards                                          */}
+          {/* ============================================================= */}
           <div className="grid grid-cols-2 lg:grid-cols-4" style={{ gap: 'var(--space-card-gap)' }}>
-            {/* Card 1 — Portfolio Value */}
             <div className="cursor-pointer" onClick={() => router.push(buildChatUrl(portfolioValuePrompt(totalValue)))}>
               <StatCard
                 title="Portfolio Value"
@@ -424,7 +473,6 @@ function DashboardContent() {
               />
             </div>
 
-            {/* Card 2 — 24h P&L */}
             <div className="cursor-pointer" onClick={() => router.push(buildChatUrl(pnlPrompt(totalPnl, totalPnlPct)))}>
               <StatCard
                 title="24h P&L"
@@ -435,7 +483,6 @@ function DashboardContent() {
               />
             </div>
 
-            {/* Card 3 — AI Alerts Today */}
             <div className="cursor-pointer" onClick={() => router.push(buildChatUrl(alertsPrompt()))}>
               <StatCard
                 title="AI Alerts Today"
@@ -445,7 +492,6 @@ function DashboardContent() {
               />
             </div>
 
-            {/* Card 4 — Wallet Health Score */}
             <div className="cursor-pointer" onClick={() => router.push(buildChatUrl(walletHealthPrompt()))}>
               <StatCard
                 title="Wallet Health"
@@ -456,30 +502,44 @@ function DashboardContent() {
             </div>
           </div>
 
-          {/* Portfolio Performance Chart — full width */}
-          <div className="mt-8">
-            <PortfolioPerformanceChart />
+          {/* ============================================================= */}
+          {/* ROW 2 — Portfolio Performance (3 cols) + Market Pulse (1 col)  */}
+          {/* ============================================================= */}
+          <div className="grid grid-cols-1 xl:grid-cols-4 mt-6" style={{ gap: 'var(--space-card-gap)' }}>
+            <div className="xl:col-span-3">
+              <PortfolioPerformanceChart />
+            </div>
+            <div className="xl:col-span-1">
+              <PelicanMarketPulse />
+            </div>
           </div>
 
-          {/* Pelican Market Pulse + Wallet DNA — 2-column on lg */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 mt-6" style={{ gap: 'var(--space-card-gap)' }}>
-            <PelicanMarketPulse />
-            <WalletDNARadar />
+          {/* ============================================================= */}
+          {/* ROW 3 — Top Movers (2 cols) + Wallet DNA (2 cols)             */}
+          {/* ============================================================= */}
+          <div className="grid grid-cols-1 xl:grid-cols-2 mt-6" style={{ gap: 'var(--space-card-gap)' }}>
+            <div>
+              <SectionHeader title="Top Movers" />
+              <TopMoversTable movers={MOCK_TOP_MOVERS} />
+            </div>
+            <div>
+              <SectionHeader title="Wallet DNA" />
+              <WalletDNARadar />
+            </div>
           </div>
 
-          {/* Top Movers */}
-          <div className="mt-8">
-            <SectionHeader title="Top Movers" />
-            <TopMoversTable movers={MOCK_TOP_MOVERS} />
-          </div>
-
-          {/* Smart Money Activity */}
-          <div className="mt-8">
+          {/* ============================================================= */}
+          {/* ROW 4 — Smart Money Activity (full width)                     */}
+          {/* ============================================================= */}
+          <div className="mt-6">
             <SectionHeader title="Smart Money Activity" live />
             <SmartMoneyFeed entries={MOCK_SMART_MONEY_FEED} />
           </div>
         </motion.div>
       </AnimatePresence>
+
+      {/* Ask Pelican FAB */}
+      <AskPelicanFAB />
     </div>
   )
 }
